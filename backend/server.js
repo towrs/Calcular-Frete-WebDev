@@ -21,22 +21,26 @@ const precos={
     drone: 1.20
 }
 
-//CRIANDO A ROTA DA APLICAÇÃO
+// CRIANDO A ROTA DA APLICAÇÃO
 app.post("/calcularfrete",(req,res)=>{
-    //desestruturação para extrair as variáveis da aplicação
-    const{distancia,tipoTransporte} =req.body;
+    // desestruturação para extrair as variaveis da aplicação
+    const{distancia,tipoTransporte}= req.body;
 
-    if(distancia === undefined || tipoTransporte ===undefined)
+    if(distancia === undefined || tipoTransporte ===undefined){
         return res.status(400).json({error:"distância e transporte obrigatórios"})
+    }
+
+    const precoPorKM = precos[tipoTransporte.toLowerCase()];
+
+    if(precoPorKM === undefined){
+        return res.status(400).json({error:"Tipo de Transporte inválido"})
+    }
+
+    // CALCULAR O VALOR TOTAL DO FRETE
+    const valorTotal = distancia * precoPorKM;
+
+    res.json({valorTotal: valorTotal.toFixed(2)})//ARRENDA PARA 2 CASAS DECIMAIS
 })
-
-const precoporKM = precos[tipoTransporte.toLowerCase()];
-if(distancia === undefined || tipoTransporte ===undefined)
-        return res.status(400).json({error:"Tipo de  transporte inválido"})
-
-//CALCULAR O VALOR TOTAL NO FRETE
-const valorTotal = distancia * precoporKM;
-res.json({valorTotal: valorTotal.toFixed(2)}) //ARREDONDA DUAS CASAS
 
 app.listen(port,()=>{
     console.log(`Servidor rodando na porta ${port}`)
