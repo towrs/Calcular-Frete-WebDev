@@ -8,7 +8,10 @@ function CalcularFrete() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  //Criando a função handleSubmit
   const handleSubmit = async (e) => {
+    //evita que a pagina se recarregue
+    e.preventDefault();
     e.preventDefault();
     setLoading(true);
     setValorFrete(null);
